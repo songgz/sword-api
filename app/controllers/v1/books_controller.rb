@@ -4,7 +4,7 @@ class V1::BooksController < ApplicationController
   # GET /v1/books
   # GET /v1/books.json
   def index
-    @v1_books = Book.all.page(params[:page]).per(params[:pre])
+    @v1_books = Book.all.page(params[:page]).per(params[:per])
     @pagination = pagination(@v1_books)
   end
 

@@ -49,6 +49,8 @@ gem "jwt_sessions"
 gem 'mongoid'
 gem 'kaminari-mongoid'
 gem 'mongoid-tree', require: 'mongoid/tree'
+#gem 'mongoid_fulltext', "~> 0.8.2"
+gem 'mongoid_search'
 
 
 

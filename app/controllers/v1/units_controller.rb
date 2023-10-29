@@ -8,7 +8,10 @@ class V1::UnitsController < ApplicationController
       book_id: params[:book_id]
     }.delete_if { |k, v| v.blank? }
 
-    @v1_units = paginate(Unit.where(opts).order(seq: 1)) #.page(params[:page]).per(params[:per])
+    @v1_units = Unit.includes(:book).where(opts)
+    @v1_units = @v1_units.full_text_search(params[:key]) if params[:key].present?
+    @v1_units = @v1_units.order(book_id: 1, id: 1).page(params[:page]).per(params[:per])
+    @pagination = pagination(@v1_units)
 
   end
 

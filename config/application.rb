@@ -40,5 +40,8 @@ module SwordApi
       g.orm :mongoid
     end
     config.mongoid.logger = Logger.new(STDERR, :warn)
+
+    config.sword = config_for(:sword)
+
   end
 end

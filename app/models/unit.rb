@@ -14,4 +14,8 @@ class Unit
   belongs_to :book
   has_and_belongs_to_many :words, inverse_of: nil
 
+  def book_name
+    book.name
+  end
+
 end

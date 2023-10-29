@@ -90,6 +90,7 @@ GEM
       railties (>= 5.0.0)
     faker (3.2.1)
       i18n (>= 1.8.11, < 2)
+    fast-stemmer (1.0.2)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.1)
@@ -122,15 +123,18 @@ GEM
     minitest (5.20.0)
     mongo (2.19.1)
       bson (>= 4.14.1, < 5.0.0)
-    mongoid (8.1.2)
-      activemodel (>= 5.1, < 7.1, != 7.0.0)
+    mongoid (8.1.3)
+      activemodel (>= 5.1, < 7.2, != 7.0.0)
       concurrent-ruby (>= 1.0.5, < 2.0)
       mongo (>= 2.18.0, < 3.0.0)
       ruby2_keywords (~> 0.0.5)
     mongoid-tree (2.2.0)
       mongoid (>= 4.0, < 9)
+    mongoid_search (0.4.0)
+      fast-stemmer (~> 1.0.0)
+      mongoid (>= 5.0.0)
     msgpack (1.7.2)
-    net-imap (0.4.1)
+    net-imap (0.4.2)
       date
       net-protocol
     net-pop (0.1.2)
@@ -204,7 +208,7 @@ GEM
     rspec-support (3.12.1)
     ruby2_keywords (0.0.5)
     stringio (3.0.8)
-    thor (1.2.2)
+    thor (1.3.0)
     timeout (0.4.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
@@ -230,6 +234,7 @@ DEPENDENCIES
   kaminari-mongoid
   mongoid
   mongoid-tree
+  mongoid_search
   puma (~> 5.0)
   rack-cors
   rails (~> 7.0.8)

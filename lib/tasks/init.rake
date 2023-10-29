@@ -1,6 +1,8 @@
 namespace :init do
   desc "TODO"
   task menu: :environment do
+    MenuItem.delete_all
+
     MenuItem.create(title: '菜单', sign: 'sys-menu') do |sys|
       sys.children.build(title: '校区', icon: 'ri-dashboard-2-line', sign: 'mod-school') do |mod|
         mod.children.build(title: '分校管理', link: 'schools')
@@ -19,6 +21,7 @@ namespace :init do
       sys.children.build(title: '教材', icon: 'ri-stack-line', sign: 'mod-book') do |mod|
         mod.children.build(title: '课本管理', link: 'books')
         mod.children.build(title: '单元管理', link: 'units')
+        mod.children.build(title: '单词管理', link: 'words')
       end
       sys.children.build(title: '设置', icon: 'ri-apps-2-line', sign: 'mod-book') do |mod|
         mod.children.build(title: '数据字典', link: 'dict_items')

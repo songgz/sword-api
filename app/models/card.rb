@@ -1,6 +1,7 @@
 class Card
   include Mongoid::Document
   include Mongoid::Timestamps
+  include Mongoid::Search
 
   field :card_no, type: String, default: -> {gen_rand_no}
   field :kind, type: String, default: 'HALF_YEAR' #HALF_YEAR
@@ -14,10 +15,15 @@ class Card
   belongs_to :school, optional: true
   belongs_to :student, optional: true
 
+  search_in :card_no, :school_name, :student_name, :student_acct_no
+
   set_callback(:initialize, :after) do |doc|
-    if doc.student
+    if doc.student_id_changed?
       doc.student_name = doc.student.name
       doc.student_acct_no = doc.student.acct_no
+    end
+    if doc.school_id_changed?
+      doc.school_name = doc.school&.name
     end
 
   end

@@ -4,8 +4,10 @@ class V1::StudentsController < ApplicationController
   # GET /v1/students
   # GET /v1/students.json
   def index
-    @v1_students = Student.all.page(params[:page]).per(params[:pre])
-    @pagination = pagination(@v1_students)
+    @v1_students = Student.all
+    @v1_students = @v1_students.full_text_search(params[:key]) if params[:key].present?
+    @v1_students = @v1_students.order(id: :desc)
+    @pagination = pagination(@v1_students.page(params[:page]).per(params[:pre]))
   end
 
   # GET /v1/students/1
@@ -39,6 +41,15 @@ class V1::StudentsController < ApplicationController
   # DELETE /v1/students/1.json
   def destroy
     @v1_student.destroy
+  end
+
+  def multi_create
+    params.permit!
+    p @v1_students = Student.create(params[:students])
+
+
+    render :index
+
   end
 
   private

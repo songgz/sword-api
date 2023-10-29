@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
   namespace :v1 do
-    resources :cards
+    resources :cards do
+      collection do
+        post :multi_create
+      end
+    end
     resources :teachers
     resources :schools
     resources :menu_items
@@ -20,7 +24,11 @@ Rails.application.routes.draw do
         post :logout
       end
     end
-    resources :students
+    resources :students do
+      collection do
+        post :multi_create
+      end
+    end
     resources :auth do
       collection do
         post :sign_in

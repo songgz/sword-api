@@ -4,7 +4,9 @@ class V1::CardsController < ApplicationController
   # GET /v1/cards
   # GET /v1/cards.json
   def index
-    @v1_cards = Card.all.page(params[:page]).per(params[:pre])
+    @v1_cards = Card.all
+    @v1_cards = @v1_cards.full_text_search(params[:key]) if params[:key].present?
+    @v1_cards = @v1_cards.order(id: :desc).page(params[:page]).per(params[:pre])
     @pagination = pagination(@v1_cards)
   end
 
@@ -39,6 +41,13 @@ class V1::CardsController < ApplicationController
   # DELETE /v1/cards/1.json
   def destroy
     @v1_card.destroy
+  end
+
+  def multi_create
+    params.permit!
+    p @v1_cards = Card.create(params[:cards])
+
+    render :index
   end
 
   private
