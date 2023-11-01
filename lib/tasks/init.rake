@@ -34,4 +34,17 @@ namespace :init do
     end
   end
 
+  desc "1TODO"
+  task word: :environment do
+    Word.where(unit_ids: nil).each do |w|
+      if w.unit_ids.blank?
+        ids = Unit.where(word_ids: w.id).pluck(:id)
+        w.unit_ids = ids
+        w.save
+      end
+
+    end
+
+  end
+
 end
