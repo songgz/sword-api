@@ -4,10 +4,13 @@ class V1::StudentsController < ApplicationController
   # GET /v1/students
   # GET /v1/students.json
   def index
-    @v1_students = Student.all
+    opts = {
+      teacher_id: params[:teacher_id]
+    }.delete_if { |k, v| v.blank? }
+    @v1_students = Student.where(opts)
     @v1_students = @v1_students.full_text_search(params[:key]) if params[:key].present?
-    @v1_students = @v1_students.order(id: :desc)
-    @pagination = pagination(@v1_students.page(params[:page]).per(params[:pre]))
+    @v1_students = @v1_students.order(id: :desc).page(params[:page]).per(params[:per])
+    @pagination = pagination(@v1_students)
   end
 
   # GET /v1/students/1
