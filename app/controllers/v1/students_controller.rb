@@ -7,8 +7,9 @@ class V1::StudentsController < ApplicationController
     opts = {
       teacher_id: params[:teacher_id]
     }.delete_if { |k, v| v.blank? }
+    opts[:teacher_id] = nil if opts[:teacher_id] == 'nil'
     @v1_students = Student.where(opts)
-    @v1_students = @v1_students.full_text_search(params[:key]) if params[:key].present?
+    @v1_students = @v1_students.full_text_search(params[:key]) unless params[:key].blank?
     @v1_students = @v1_students.order(id: :desc).page(params[:page]).per(params[:per])
     @pagination = pagination(@v1_students)
   end

@@ -32,7 +32,7 @@ class User
 
 
 
-  set_callback(:initialize, :after) do |doc|
+  set_callback(:create, :after) do |doc|
     doc.password = '123456'
   end
 

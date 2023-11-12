@@ -6,6 +6,7 @@ class Student < User
   belongs_to :teacher
 
 
+
   #validates :userid, presence: true, uniqueness: true, length: { minimum: 3 }
 
 

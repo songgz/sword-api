@@ -43,6 +43,19 @@ class V1::TeachersController < ApplicationController
     @v1_teacher.destroy
   end
 
+  def supervise
+    params.permit!
+    Student.where(teacher_id: params[:teacher_id]).update_all(teacher_id: nil)
+
+    students = Student.in(id: params[:student_ids])
+
+    if students.update_all(teacher_id: params[:teacher_id])
+      render json: {}, status: :created
+    else
+      render json: {}, status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_v1_teacher
