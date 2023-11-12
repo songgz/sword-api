@@ -20,6 +20,11 @@ class User
 
   has_secure_password
 
+  set_callback(:validation, :before) do |doc|
+    doc.password = '123456'
+    doc.password_confirmation = "123456"
+  end
+
   def gen_rand_no
     @@num ||= (0..9).to_a
     @@str ||= ('A'..'Z').to_a
@@ -31,10 +36,6 @@ class User
 
 
 
-
-  set_callback(:create, :after) do |doc|
-    doc.password = '123456'
-  end
 
 
 end

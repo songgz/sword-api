@@ -39,6 +39,7 @@ class V1::StudentsController < ApplicationController
     else
       render json: @v1_student.errors, status: :unprocessable_entity
     end
+    p @v1_student.errors
   end
 
   # DELETE /v1/students/1

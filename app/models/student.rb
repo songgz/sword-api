@@ -3,7 +3,7 @@ class Student < User
   field :register_type, type: String #MASTER_BOSS
   field :grade, type: String, default: ''
   has_many :cards
-  belongs_to :teacher
+  belongs_to :teacher, optional: true
 
 
 
