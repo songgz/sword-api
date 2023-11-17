@@ -45,7 +45,7 @@ class V1::CardsController < ApplicationController
 
   def multi_create
     params.permit!
-    p @v1_cards = Card.create(params[:cards])
+    @v1_cards = Card.create(params[:cards])
 
     render :index
   end

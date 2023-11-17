@@ -9,7 +9,8 @@ class User
   field :phone, type: String, default: ''
   field :salt, type: String, default: ''
   field :password_digest, type: String
-  field :acct_no, type: String, default: -> {gen_rand_no}
+  field :status, type: String, default: 'ENABLED' #ENABLED,DISABLE
+
 
   field :birthday, type: Date
   field :wechat, type: String, default: ''
@@ -19,20 +20,14 @@ class User
   search_in :name, :phone, :acct_no
 
   has_secure_password
+  has_secure_password :recovery_password, validations: false
 
   set_callback(:validation, :before) do |doc|
     doc.password = '123456'
     doc.password_confirmation = "123456"
   end
 
-  def gen_rand_no
-    @@num ||= (0..9).to_a
-    @@str ||= ('A'..'Z').to_a
-    s = @@str.sample(4).join + @@num.sample(6).join
-    #c = Card.where(no: s).first
-    #s = gen_no if c
-    s
-  end
+
 
 
 

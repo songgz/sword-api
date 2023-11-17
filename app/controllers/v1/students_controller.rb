@@ -39,7 +39,6 @@ class V1::StudentsController < ApplicationController
     else
       render json: @v1_student.errors, status: :unprocessable_entity
     end
-    p @v1_student.errors
   end
 
   # DELETE /v1/students/1
@@ -50,12 +49,22 @@ class V1::StudentsController < ApplicationController
 
   def multi_create
     params.permit!
-    p @v1_students = Student.create(params[:students])
-
+    @v1_students = Student.create(params[:students])
 
     render :index
-
   end
+
+  def recharge
+    student = Student.find(params[:student_id])
+
+    if student.recharge(params[:card_password])
+      render json: {data: {}}, status: :ok
+    else
+      render json: {error: student.errors.full_messages.join("")}, status: :unprocessable_entity
+    end
+  end
+
+
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -65,6 +74,6 @@ class V1::StudentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def v1_student_params
-      params.fetch(:student, {}).permit(:id, :name, :grade, :phone, :avatar)
+      params.fetch(:student, {}).permit(:id, :name, :grade, :phone, :avatar, :status)
     end
 end

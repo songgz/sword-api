@@ -9,15 +9,16 @@ class Card
   field :student_name, type: String
   field :student_acct_no, type: String #3036242 924555
   field :active_time, type: DateTime
-  field :status, type: String #USED
+  field :status, type: String, default: 'UNUSED' #USED,UNUSED
   field :school_name, type: String
+  field :batch_no, type: String
 
   belongs_to :school, optional: true
   belongs_to :student, optional: true
 
   search_in :card_no, :school_name, :student_name, :student_acct_no
 
-  set_callback(:initialize, :after) do |doc|
+  set_callback :save, :before do |doc|
     if doc.student_id_changed?
       doc.student_name = doc.student.name
       doc.student_acct_no = doc.student.acct_no
@@ -25,7 +26,14 @@ class Card
     if doc.school_id_changed?
       doc.school_name = doc.school&.name
     end
+  end
 
+  def active(student)
+    self.active_time = DateTime.now
+    self.student = student
+    self.school = self.student.school
+    self.status = 'USED'
+    self.save
   end
 
 
