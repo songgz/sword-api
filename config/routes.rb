@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
   namespace :v1 do
+    resources :learned_units
     resources :users do
       collection do
         post :recovery_password

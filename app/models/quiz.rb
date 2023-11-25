@@ -4,14 +4,20 @@ class Quiz
 
   field :title, type: String
   field :test_type, type: String
+  field :unit_name, type: String
+
   belongs_to :unit
-  belongs_to :user
+  belongs_to :student
   embeds_many :questions
 
-  validates :user_id, uniqueness: {scope: [:unit_id]}
+  validates :student_id, uniqueness: {scope: [:unit_id]}
 
-  set_callback(:initialize, :after) do |document|
+  set_callback(:initialize, :after) do |doc|
     generate if questions.blank?
+  end
+
+  set_callback(:save, :before) do |doc|
+    doc.unit_name = doc.unit.name
   end
 
   def generate
@@ -21,7 +27,11 @@ class Quiz
         ws = words.sample(3)
         ws << word
         ws.sample(4).each do |w|
-          question.choices.build(word: w, title: w.acceptation)
+          c = Choice.new(word: w, title: w.acceptation)
+          question.choices << c
+          if c.word == word
+            question.right_answer = c.id
+          end
         end
       end
     end

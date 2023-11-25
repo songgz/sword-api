@@ -1,5 +1,5 @@
 class V1::QuizzesController < ApplicationController
-  before_action :set_v1_quiz, only: %i[ show update destroy ]
+  #before_action :set_v1_quiz, only: %i[ show update destroy ]
 
   # GET /v1/quizzes
   # GET /v1/quizzes.json
@@ -49,6 +49,6 @@ class V1::QuizzesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def v1_quiz_params
-      params.fetch(:quiz, {}).permit(:unit_id, :user_id)
+      params.fetch(:quiz, {}).permit(:unit_id, :student_id)
     end
 end

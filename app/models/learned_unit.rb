@@ -1,4 +1,4 @@
-class LearnedBook
+class LearnedUnit
   include Mongoid::Document
   include Mongoid::Timestamps
 
@@ -7,6 +7,7 @@ class LearnedBook
   field :error_num, type: Integer
 
   belongs_to :student
-  belongs_to :book
-  has_many :learned_units
+  belongs_to :unit
+  belongs_to :learned_book, optional: true
+  embeds_many :error_words
 end

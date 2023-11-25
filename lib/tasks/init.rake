@@ -42,8 +42,19 @@ namespace :init do
         w.unit_ids = ids
         w.save
       end
-
     end
+  end
+
+
+  desc "1TODO"
+  task learn: :environment do
+    u = LearnedUnit.find_or_create_by({student_id: '653c68696eec2f1ea8aa1a2a', unit_id: '65109c936eec2f38fc2610d6'})
+    u.error_words.build(word_id: '65109c976eec2f38fc2610f9')
+    u.error_words.build(word_id: '65109c966eec2f38fc2610ee')
+    u.error_words.build(word_id: '65109c946eec2f38fc2610d9')
+    u.error_words.build(word_id: '65109c976eec2f38fc2610fa')
+    u.save
+
 
   end
 
