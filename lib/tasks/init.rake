@@ -48,12 +48,14 @@ namespace :init do
 
   desc "1TODO"
   task learn: :environment do
-    u = LearnedUnit.find_or_create_by({student_id: '653c68696eec2f1ea8aa1a2a', unit_id: '65109c936eec2f38fc2610d6'})
-    u.error_words.build(word_id: '65109c976eec2f38fc2610f9')
-    u.error_words.build(word_id: '65109c966eec2f38fc2610ee')
-    u.error_words.build(word_id: '65109c946eec2f38fc2610d9')
-    u.error_words.build(word_id: '65109c976eec2f38fc2610fa')
-    u.save
+    b = LearnedBook.find_or_create_by({student_id: '653c68696eec2f1ea8aa1a2a', book_id: '65109c936eec2f38fc2610d5'})
+    b.learned_units.build(unit_id: '65109c936eec2f38fc2610d6')
+    b.error_words.build(unit_id: '65109c936eec2f38fc2610d6', word_id: '65109c976eec2f38fc2610f9')
+    b.error_words.build(unit_id: '65109c936eec2f38fc2610d6', word_id: '65109c966eec2f38fc2610ee')
+    b.error_words.build(unit_id: '65109c936eec2f38fc2610d6', word_id: '65109c946eec2f38fc2610d9')
+    b.error_words.build(unit_id: '65109c936eec2f38fc2610d6', word_id: '65109c976eec2f38fc2610fa')
+    b.save
+    p b.errors
 
 
   end
