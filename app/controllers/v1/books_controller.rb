@@ -4,7 +4,11 @@ class V1::BooksController < ApplicationController
   # GET /v1/books
   # GET /v1/books.json
   def index
-    @v1_books = Book.all.page(params[:page]).per(params[:per])
+    opts = {
+      kind: params[:kind],
+      category: params[:category]
+    }.delete_if { |k, v| v.blank?}
+    @v1_books = Book.where(opts).page(params[:page]).per(params[:per])
     @pagination = pagination(@v1_books)
   end
 
