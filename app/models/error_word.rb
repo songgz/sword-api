@@ -3,9 +3,9 @@ class ErrorWord
   include Mongoid::Timestamps
 
   field :repeats, type: Integer, default: 0
-  field :error_num, type: Integer, default: 0
   field :learns, type: Integer, default: 0
   field :reviews, type: Integer, default: 0
+  field :is_wrong, type: Boolean, default: false
 
   belongs_to :unit
   belongs_to :word
