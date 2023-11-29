@@ -1,5 +1,5 @@
 class V1::LearnedBooksController < ApplicationController
-  before_action :set_v1_learned_book, only: %i[ update destroy ]
+  before_action :set_v1_learned_book, only: %i[ destroy ]
 
   # GET /v1/learned_books
   # GET /v1/learned_books.json
@@ -26,8 +26,11 @@ class V1::LearnedBooksController < ApplicationController
   # POST /v1/learned_books.json
   def create
     @v1_learned_book = LearnedBook.find_or_create_by({student_id: v1_learned_book_params[:student_id], book_id: v1_learned_book_params[:book_id]})
-
-
+    params.permit!
+    p params[:error_words]
+    @v1_learned_book.error_words = params[:error_words].map {|ew| ew.to_h} unless params[:error_words].blank?
+    # eb_ids = @v1_learned_book.error_words.map(&:word_id)
+    # @er_words = Word.in(id: eb_ids).map { |w| [w.id, w] }.to_h
 
     if @v1_learned_book.save
       render :show, status: :created, location: v1_learned_books_url(@v1_learned_book)
@@ -60,6 +63,6 @@ class V1::LearnedBooksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def v1_learned_book_params
-      params.fetch(:learned_book, {}).permit(:student_id, :book_id)
+      params.fetch(:learned_book, {}).permit(:student_id, :book_id, :error_words)
     end
 end
