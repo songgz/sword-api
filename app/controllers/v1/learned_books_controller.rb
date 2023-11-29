@@ -29,7 +29,7 @@ class V1::LearnedBooksController < ApplicationController
     params.permit!
     p params[:error_words]
     @v1_learned_book.error_words = params[:error_words].map {|ew| ew.to_h} unless params[:error_words].blank?
-    @v1_learned_book.error_words = params[:learned_units].map {|u| u.to_h} unless  params[:learned_units].blank?
+    @v1_learned_book.learned_units = params[:learned_units].map {|u| u.to_h} unless  params[:learned_units].blank?
     # eb_ids = @v1_learned_book.error_words.map(&:word_id)
     # @er_words = Word.in(id: eb_ids).map { |w| [w.id, w] }.to_h
 

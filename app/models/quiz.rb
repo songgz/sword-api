@@ -5,6 +5,11 @@ class Quiz
   field :title, type: String
   field :test_type, type: String
   field :unit_name, type: String
+  field :corrects, type: Integer, default: 0
+  field :wrongs, type: Integer, default: 0
+  field :total, type: Integer, default: 0
+  field :score, type: Float, default: 0.0
+  field :duration, type: Integer, default: 0
 
   belongs_to :unit
   belongs_to :student
@@ -21,8 +26,9 @@ class Quiz
   end
 
   def generate
+    total = 20
     words = unit.words.to_a
-    words.sample(20).each do |word|
+    words.sample(total).each do |word|
       questions.build(word: word, title: word.word) do |question|
         ws = words.sample(3)
         ws << word
