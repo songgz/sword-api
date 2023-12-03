@@ -5,6 +5,7 @@ class LearnedBook
   field :progress, type: Float, default: 0.0
   field :rights, type: Integer, default: 0
   field :wrongs, type: Integer, default: 0
+  field :learn_type, type: String, default: ''
 
   belongs_to :student
   belongs_to :book

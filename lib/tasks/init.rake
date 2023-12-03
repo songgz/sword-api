@@ -48,7 +48,7 @@ namespace :init do
 
   desc "1TODO"
   task learn: :environment do
-    b = LearnedBook.find_or_create_by({student_id: '653c68696eec2f1ea8aa1a2a', book_id: '65109c936eec2f38fc2610d5'})
+    b = LearnedBook.find_or_create_by({student_id: '653c68696eec2f1ea8aa1a2a', book_id: '65109c936eec2f38fc2610d5', learn_type: 'read'})
     b.learned_units.build(unit_id: '65109c936eec2f38fc2610d6')
     b.error_words.build(unit_id: '65109c936eec2f38fc2610d6', word_id: '65109c976eec2f38fc2610f9')
     b.error_words.build(unit_id: '65109c936eec2f38fc2610d6', word_id: '65109c966eec2f38fc2610ee')

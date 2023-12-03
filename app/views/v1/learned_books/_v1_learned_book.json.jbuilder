@@ -1,4 +1,4 @@
-json.extract! v1_learned_book, :id, :student_id, :book_id, :progress, :rights, :wrongs, :created_at, :updated_at
+json.extract! v1_learned_book, :id, :student_id, :book_id, :learn_type, :progress, :rights, :wrongs, :created_at, :updated_at
 json.learned_units v1_learned_book.learned_units, :id, :unit_id, :unit_name, :progress, :learns, :wrongs, :words
 json.error_words v1_learned_book.error_words do |eb|
   json.(eb, :id, :unit_id, :word_id, :repeats, :learns, :reviews, :is_wrong)
