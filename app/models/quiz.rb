@@ -10,6 +10,7 @@ class Quiz
   field :total, type: Integer, default: 0
   field :score, type: Float, default: 0.0
   field :duration, type: Integer, default: 0
+  field :learn_type, type: String
 
   belongs_to :unit
   belongs_to :student
