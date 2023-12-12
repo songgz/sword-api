@@ -43,5 +43,7 @@ module SwordApi
 
     config.sword = config_for(:sword)
 
+    config.autoload_paths += %W(#{config.root}/app/services)
+
   end
 end

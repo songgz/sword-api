@@ -47,6 +47,7 @@ Rails.application.routes.draw do
       collection do
         post :sign_in
         post :logout
+        post :change_password
       end
     end
   end

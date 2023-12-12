@@ -10,7 +10,7 @@ class Student < User
   def recharge(card_password)
     card = Card.where(status: 'UNUSED', card_no: /.*#{card_password}/).first
     errors.add(:base, :invalid, message: "非法充值卡，不能充值。") if card.blank?
-    errors.add(:base, :invalid, message: "VIP未到期，不能充值。") if self.vip_expiration_time > DateTime.now
+    errors.add(:base, :invalid, message: "VIP未到期，不能充值。") if self.vip_expiration_time && self.vip_expiration_time > DateTime.now
 
     if errors.empty?
       card.active(self)
@@ -31,6 +31,22 @@ class Student < User
     #c = Card.where(no: s).first
     #s = gen_no if c
     s
+  end
+
+  def vip_days
+    return  (self.vip_expiration_time.to_date - DateTime.now.to_date).to_i if self.vip_expiration_time
+    return 0
+  end
+
+  after_initialize do |doc|
+    if doc.password_digest.blank?
+      doc.password = doc.acct_no[-6..]
+      doc.password_confirmation = doc.acct_no[-6..]
+    end
+  end
+
+  def gen_password
+
   end
 
 

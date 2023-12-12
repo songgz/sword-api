@@ -5,4 +5,9 @@ class Teacher < User
 
   has_many :students
 
+  set_callback(:create, :before) do |doc|
+    doc.password = doc.phone[-6..]
+    doc.password_confirmation = doc.phone[-6..]
+  end
+
 end

@@ -22,10 +22,7 @@ class User
   has_secure_password
   has_secure_password :recovery_password, validations: false
 
-  set_callback(:validation, :before) do |doc|
-    doc.password = '123456'
-    doc.password_confirmation = "123456"
-  end
+
 
 
 

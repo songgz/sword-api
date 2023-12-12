@@ -30,40 +30,61 @@ class V1::LearnedBooksController < ApplicationController
   # POST /v1/learned_books
   # POST /v1/learned_books.json
   def create
-    @v1_learned_book = LearnedBook.find_or_create_by({
-                                                       student_id: v1_learned_book_params[:student_id],
-                                                       book_id: v1_learned_book_params[:book_id],
-                                                       learn_type: v1_learned_book_params[:learn_type],
-                                                     })
     params.permit!
-    data = params.to_h
-    p ewords = data[:error_words]
-    p ews = @v1_learned_book.error_words.to_a
-    unless ewords.blank?
-      ewords.each do |ew|
-        @v1_learned_book.error_words.build(ew.to_h) unless ews.detect {|w| w.word_id.to_s == ew['word_id']}
-      end
-    end
-    @v1_learned_book.learned_units = params[:learned_units].map {|u| u.to_h} unless  params[:learned_units].blank?
-    # eb_ids = @v1_learned_book.error_words.map(&:word_id)
-    # @er_words = Word.in(id: eb_ids).map { |w| [w.id, w] }.to_h
-    p @v1_learned_book.errors
+    service = BookSelectionService.new( params[:student_id],params[:book_id])
 
-    if @v1_learned_book.save
-      render :show, status: :created, location: v1_learned_books_url(@v1_learned_book)
+
+    p service.errors
+    p service
+    p service.valid?
+
+    if service.perform
+      render json: :ok, status: :created
     else
-      render json: @v1_learned_book.errors, status: :unprocessable_entity
+      render json: {messages: service.errors.full_messages}, status: :unprocessable_entity
     end
+
+
+
   end
 
   # PATCH/PUT /v1/learned_books/1
   # PATCH/PUT /v1/learned_books/1.json
   def update
-    if @v1_learned_book.update(v1_learned_book_params)
-      render :show, status: :ok, location: @v1_learned_book
-    else
-      render json: @v1_learned_book.errors, status: :unprocessable_entity
-    end
+    params.permit!
+    @v1_learned_book = LearnedBook.where({
+                                                           student_id: params[:student_id],
+                                                           book_id: params[:book_id],
+                                                           learn_type: params[:learn_type],
+                                                         }).first
+
+      data = params.to_h
+      p ewords = data[:error_words]
+      p ews = @v1_learned_book.error_words.to_a
+      unless ewords.blank?
+        ewords.each do |ew|
+          @v1_learned_book.error_words.build(ew.to_h) unless ews.detect {|w| w.word_id.to_s == ew['word_id']}
+        end
+      end
+      @v1_learned_book.learned_units = params[:learned_units].map {|u| u.to_h} unless  params[:learned_units].blank?
+      # eb_ids = @v1_learned_book.error_words.map(&:word_id)
+      # @er_words = Word.in(id: eb_ids).map { |w| [w.id, w] }.to_h
+      p @v1_learned_book.errors
+
+      if @v1_learned_book.save
+        render :show, status: :created, location: v1_learned_books_url(@v1_learned_book)
+      else
+        render json: @v1_learned_book.errors, status: :unprocessable_entity
+      end
+
+
+
+
+    # if @v1_learned_book.update(v1_learned_book_params)
+    #   render :show, status: :ok, location: @v1_learned_book
+    # else
+    #   render json: @v1_learned_book.errors, status: :unprocessable_entity
+    # end
   end
 
   # DELETE /v1/learned_books/1

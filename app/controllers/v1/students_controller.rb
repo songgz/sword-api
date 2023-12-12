@@ -23,6 +23,8 @@ class V1::StudentsController < ApplicationController
   # POST /v1/students.json
   def create
     @v1_student = Student.new(v1_student_params)
+    p @v1_student
+    p @v1_student.errors
 
     if @v1_student.save
       render :show, status: :created, location: v1_student_url(@v1_student)
@@ -56,9 +58,22 @@ class V1::StudentsController < ApplicationController
 
   def recharge
     student = Student.find(params[:student_id])
+    p params
+    p student
 
     if student.recharge(params[:card_password])
-      render json: {data: {}}, status: :ok
+      u = {
+        id: student.id,
+        name: student.name,
+        acct_no: student.acct_no,
+        avatar: student.avatar,
+        school_name: student.school&.name,
+        school_id: student.school_id,
+        vip_days: student.vip_days,
+        grade: @user.grade,
+        birthday: @user.birthday
+      }
+      render json: {data: u}, status: :ok
     else
       render json: {error: student.errors.full_messages.join("")}, status: :unprocessable_entity
     end
