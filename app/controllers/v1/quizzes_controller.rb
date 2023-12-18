@@ -8,7 +8,7 @@ class V1::QuizzesController < ApplicationController
       student_id: params[:student_id]
     }.delete_if { |k, v| v.blank?}
     @v1_quizzes = Quiz.where(opts).page(params[:page]).per(params[:per])
-    @pagination = pagination(@v1_books)
+    @pagination = pagination(@v1_quizzes)
   end
 
   # GET /v1/quizzes/1
