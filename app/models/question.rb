@@ -7,7 +7,7 @@ class Question
   field :right_answer
   field :result, type: Boolean, default: false
 
-  belongs_to :word
+  belongs_to :word, optional: true
   embedded_in :quiz
   embeds_many :choices
 
