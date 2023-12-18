@@ -4,7 +4,11 @@ class V1::QuizzesController < ApplicationController
   # GET /v1/quizzes
   # GET /v1/quizzes.json
   def index
-    @v1_quizzes = Quiz.all
+    opts = {
+      student_id: params[:student_id]
+    }.delete_if { |k, v| v.blank?}
+    @v1_quizzes = Quiz.where(opts).page(params[:page]).per(params[:per])
+    @pagination = pagination(@v1_books)
   end
 
   # GET /v1/quizzes/1
