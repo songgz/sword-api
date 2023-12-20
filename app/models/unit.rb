@@ -5,7 +5,7 @@ class Unit
   field :no, type: String
   field :name, type: String
   field :desc, type: String
-  field :word_count, type:String
+  field :word_count, type: Integer
   field :status, type: String
   field :seq, type: Integer
   field :my_id, type: Integer

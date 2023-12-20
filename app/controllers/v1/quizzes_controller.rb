@@ -38,8 +38,8 @@ class V1::QuizzesController < ApplicationController
   # PATCH/PUT /v1/quizzes/1
   # PATCH/PUT /v1/quizzes/1.json
   def update
-    puts params.inspect
-    puts v1_quiz_params.inspect
+    # puts params.inspect
+    # puts v1_quiz_params.inspect
 
     v1_quiz_params[:questions].each do |updated_question|
       question = @v1_quiz.questions.detect { |q| q.id.to_s == updated_question[:id].to_s }
