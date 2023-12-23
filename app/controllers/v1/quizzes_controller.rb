@@ -54,6 +54,17 @@ class V1::QuizzesController < ApplicationController
                         score: v1_quiz_params[:score],
                         duration: v1_quiz_params[:duration]
                        })
+      lu = @v1_quiz.learned_unit
+      if lu
+        if @v1_quiz.test_type == 'beforeLearn'
+          lu.before_learn_quiz = true
+        end
+        if @v1_quiz.test_type == 'afterLearn'
+          lu.after_learn_quiz = true
+        end
+        lu.save
+      end
+
       render :show, status: :ok, location: v1_quiz_url(@v1_quiz)
     else
       render json: @v1_quiz.errors, status: :unprocessable_entity

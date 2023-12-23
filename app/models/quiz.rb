@@ -21,6 +21,13 @@ class Quiz
 
   validates :student_id, uniqueness: {scope: [:unit_id, :test_type, :learn_type]}
 
+  def learned_unit
+    lb = LearnedBook.where({book_id: self.book_id, student_id:self.student_id, learn_type: self.learn_type}).first
+    if lb
+      return lu = lb.learned_units.detect {|u| u.unit_id == self.unit_id}
+    end
+  end
+
   set_callback(:initialize, :after) do |doc|
     #generate if questions.blank?
   end

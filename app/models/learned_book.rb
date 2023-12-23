@@ -24,6 +24,7 @@ class LearnedBook
       learned_units.build(unit_id: u.id, unit_name: u.name, total: u.word_count)
     end
   end
+  #sword@123
 
   set_callback(:save, :before) do |doc|
     doc.completions = 0
