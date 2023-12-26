@@ -112,7 +112,15 @@ class V1::LearnedBooksController < ApplicationController
   # DELETE /v1/learned_books/1
   # DELETE /v1/learned_books/1.json
   def destroy
-    @v1_learned_book.destroy
+    params.permit!
+    @v1_learned_book.error_words.where(unit_id: params[:learned_unit_id].to_s).delete
+    learned_unit = @v1_learned_book.learned_units.detect { |u| u.id.to_s == params[:learned_unit_id].to_s}
+    learned_unit.completions = 0
+    learned_unit.rights = 0
+    learned_unit.wrongs = 0
+    learned_unit.last_word_index =0
+    @v1_learned_book.save
+    render json: @v1_learned_book.errors, status: :ok
   end
 
   private
