@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :statistics
   resources :menu_items
 
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -6,6 +7,8 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "articles#index"
   namespace :v1 do
+    resources :words
+    resources :statistics
     resources :learned_units
     resources :users do
       collection do
@@ -28,7 +31,7 @@ Rails.application.routes.draw do
     resources :schools
     resources :menu_items
     resources :quizzes
-    resources :words
+    resources :dictionaries
     resources :units
     resources :books
     resources :auths do

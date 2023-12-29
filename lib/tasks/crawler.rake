@@ -35,7 +35,7 @@ namespace :crawler do
                        })
 
         Gls.downWord(unit['columnNo']).each do |word|
-          w = Word.find_or_create_by({
+          w = Dictionary.find_or_create_by({
                            book_category: word['bookSort'],
                            no: word['wordNo'],
                            word: word['content1'],

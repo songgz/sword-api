@@ -4,13 +4,12 @@ class V1::WordsController < ApplicationController
   # GET /v1/words
   # GET /v1/words.json
   def index
-
     opts = {
       book_category: params[:book_category],
-      unit_ids: params[:unit_id]
+      unit_id: params[:unit_id]
     }.delete_if { |k, v| v.blank? or v == /.*.*/i }
-    @v1_words = Word.where(opts)
-    @v1_words = @v1_words.full_text_search(params[:key]) if params[:key].present?
+    @v1_words = Word.includes(:dictionary).where(opts)
+    #@v1_words = @v1_words.full_text_search(params[:key]) if params[:key].present?
     @v1_words = @v1_words.order(id: :desc).page(params[:page]).per(params[:per])
     @pagination = pagination(@v1_words)
 
@@ -46,18 +45,17 @@ class V1::WordsController < ApplicationController
   # DELETE /v1/words/1
   # DELETE /v1/words/1.json
   def destroy
-    @v1_word.destroy
+    @v1_word.destroy!
   end
 
   private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_v1_word
+      @v1_word = Word.find(params[:id])
+    end
 
-  # Use callbacks to share common setup or constraints between actions.
-  def set_v1_word
-    @v1_word = Word.find(params[:id])
-  end
-
-  # Only allow a list of trusted parameters through.
-  def v1_word_params
-    params.fetch(:v1_word, {})
-  end
+    # Only allow a list of trusted parameters through.
+    def v1_word_params
+      params.fetch(:v1_word, {})
+    end
 end

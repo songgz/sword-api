@@ -36,7 +36,7 @@ namespace :init do
 
   desc "1TODO"
   task word: :environment do
-    Word.where(unit_ids: nil).each do |w|
+    Dictionary.where(unit_ids: nil).each do |w|
       if w.unit_ids.blank?
         ids = Unit.where(word_ids: w.id).pluck(:id)
         w.unit_ids = ids
@@ -56,6 +56,26 @@ namespace :init do
     b.error_words.build(unit_id: '65109c936eec2f38fc2610d6', word_id: '65109c976eec2f38fc2610fa')
     b.save
     p b.errors
+
+
+  end
+
+
+  desc "modify"
+  task mod_word: :environment do
+    Unit.all.each do |u|
+      u.words.each do |w|
+        Word.create({
+                      book_id: u.book_id,
+                      unit_id: u.id,
+                      dictionary_id: w.id,
+                      word: w.word,
+                      book_category: w.book_category,
+                      unit_name: u.name,
+                      book_name: u.book.name
+                    })
+      end
+    end
 
 
   end

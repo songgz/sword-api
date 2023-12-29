@@ -12,7 +12,7 @@ class Unit
   field :my_word_nos, type: Array, default: []
 
   belongs_to :book
-  has_and_belongs_to_many :words, inverse_of: nil
+  has_and_belongs_to_many :words, class_name: 'Dictionary', inverse_of: nil
 
   def book_name
     book.name
