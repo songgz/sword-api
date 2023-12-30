@@ -65,6 +65,7 @@ namespace :init do
   task mod_word: :environment do
     Unit.all.each do |u|
       u.words.each do |w|
+        begin
         Word.create({
                       book_id: u.book_id,
                       unit_id: u.id,
@@ -74,6 +75,9 @@ namespace :init do
                       unit_name: u.name,
                       book_name: u.book.name
                     })
+        end
+      rescue ZeroDivisionError => e
+        puts "sgz：#{e.message}"
       end
     end
 
