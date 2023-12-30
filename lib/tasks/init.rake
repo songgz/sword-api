@@ -75,9 +75,10 @@ namespace :init do
                       unit_name: u.name,
                       book_name: u.book.name
                     })
-        end
+
       rescue ZeroDivisionError => e
         puts "sgz：#{e.message}"
+        end
       end
     end
 

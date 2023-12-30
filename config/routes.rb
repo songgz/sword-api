@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     resources :statistics do
       collection do
         get :week
+        get :month
+        get :year
       end
     end
     resources :learned_units
