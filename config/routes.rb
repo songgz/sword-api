@@ -8,7 +8,11 @@ Rails.application.routes.draw do
   # root "articles#index"
   namespace :v1 do
     resources :words
-    resources :statistics
+    resources :statistics do
+      collection do
+        get :week
+      end
+    end
     resources :learned_units
     resources :users do
       collection do

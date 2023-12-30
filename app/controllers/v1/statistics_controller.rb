@@ -1,53 +1,56 @@
 class V1::StatisticsController < ApplicationController
-  before_action :set_v1_statistic, only: %i[ show update destroy ]
 
-  # GET /v1/statistics
-  # GET /v1/statistics.json
-  def index
-    @v1_statistics = V1::LearnedWord.all
-  end
 
-  # GET /v1/statistics/1
-  # GET /v1/statistics/1.json
-  def show
-  end
+  def week
+    start_date = Date.today.beginning_of_week
+    end_date = Date.today.end_of_week
+    student_id = params[:student_id]
 
-  # POST /v1/statistics
-  # POST /v1/statistics.json
-  def create
-    @v1_statistic = V1::LearnedWord.new(v1_statistic_params)
+    result = LearnedWord.collection.aggregate([
+                                 { "$match" => {
+                                   "student_id" => BSON::ObjectId(student_id),
+                                   "day" => {"$gte" => start_date, "$lte" => end_date }}
+                                 },
+                                 { "$group" => {
+                                   "_id" => {"$dayOfWeek" => "$day"},
+                                   "day" => { "$first" => "$day" },
+                                   "total_duration" => { "$sum" => "$duration" },
+                                   "total_words" => {"$sum" => 1}
+                                 }
+                                 },
+                                 { "$sort" => { "_id" => 1 } },
+                                 {
+                                   "$project" => {
+                                     "_id" => 0,
+                                     "week" => "$_id",
+                                     "day" => 1,
+                                     "total_duration" => 1,
+                                     "total_words" => 1
+                                   }
+                                 }
+                               ]).to_a
 
-    if @v1_statistic.save
-      render :show, status: :created, location: @v1_statistic
-    else
-      render json: @v1_statistic.errors, status: :unprocessable_entity
+    data = {weeks: [],days: [], durations: [], words: []}
+    (0..6).each do |i|
+      data[:weeks] << i
+      data[:days] << start_date + i
+      p start_date + i
+      p result
+      d = result.detect {|r| r["week"] == i+1}
+      if d
+        data[:durations] << d["total_duration"]
+        data[:words] << d["total_words"]
+      else
+        data[:durations] << 0
+        data[:words] << 0
+      end
+
     end
+
+    render json: {data: data}, status: :ok
+
   end
 
-  # PATCH/PUT /v1/statistics/1
-  # PATCH/PUT /v1/statistics/1.json
-  def update
-    if @v1_statistic.update(v1_statistic_params)
-      render :show, status: :ok, location: @v1_statistic
-    else
-      render json: @v1_statistic.errors, status: :unprocessable_entity
-    end
-  end
 
-  # DELETE /v1/statistics/1
-  # DELETE /v1/statistics/1.json
-  def destroy
-    @v1_statistic.destroy!
-  end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_v1_statistic
-      @v1_statistic = V1::LearnedWord.find(params[:id])
-    end
-
-    # Only allow a list of trusted parameters through.
-    def v1_statistic_params
-      params.fetch(:v1_statistic, {})
-    end
 end
