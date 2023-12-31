@@ -13,6 +13,7 @@ Rails.application.routes.draw do
         get :week
         get :month
         get :year
+        get :notebook
       end
     end
     resources :learned_units

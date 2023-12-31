@@ -36,7 +36,7 @@ class V1::StatisticsController < ApplicationController
       data[:days] << start_date + i
       d = result.detect {|r| r["week"] == i+1}
       if d
-        data[:durations] << d["total_duration"]
+        data[:durations] << (d["total_duration"]/60).floor
         data[:words] << d["total_word"]
       else
         data[:durations] << 0
@@ -81,7 +81,7 @@ class V1::StatisticsController < ApplicationController
       data[:days] << start_date + i
       d = result.detect {|r| r["seq"] == i+1}
       if d
-        data[:durations] << d["total_duration"]
+        data[:durations] << (d["total_duration"]/60).floor
         data[:words] << d["total_word"]
       else
         data[:durations] << 0
@@ -127,7 +127,7 @@ class V1::StatisticsController < ApplicationController
       data[:days] << start_date + i
       d = result.detect {|r| r["seq"] == i+1}
       if d
-        data[:durations] << d["total_duration"]
+        data[:durations] << (d["total_duration"]/60).floor
         data[:words] << d["total_word"]
       else
         data[:durations] << 0
@@ -136,6 +136,30 @@ class V1::StatisticsController < ApplicationController
     end
 
     render json: {data: data}, status: :ok
+  end
+
+  def notebook
+    student_id = params[:student_id]
+    result = []
+    result = LearnedBook.collection.aggregate([
+                                                { "$match" => {
+                                                  "student_id" => BSON::ObjectId(student_id) }
+                                                },
+                                                { "$group" => {
+                                                  "_id" => "$book_id",
+                                                  "book_name" => { "$first" => "$book_name" },
+                                                  "book_cover" => { "$first" => "$book_cover" },
+                                                  "words" => { "$addToSet" => {"learned_book_id" => "$_id" ,"learn_type"=> "$learn_type", "wrongs"=> "$wrongs"}}}
+                                                },
+                                                { "$project" => {
+                                                    "_id" => 0,
+                                                    "book_id" => "$_id",
+                                                    "book_name" => 1,
+                                                    "book_cover" => 1,
+                                                    "words" => 1 }
+                                                }
+                                              ]).to_a if student_id.present?
+    render json: {data: result}, status: :ok
   end
 
 

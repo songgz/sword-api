@@ -8,6 +8,8 @@ class LearnedBook
   field :rights, type: Integer, default: 0
   field :wrongs, type: Integer, default: 0
   field :learn_type, type: String, default: ''
+  field :book_name, type: String, default: ''
+  field :book_cover, type: String, default: ''
 
   belongs_to :student
   belongs_to :book
@@ -16,6 +18,8 @@ class LearnedBook
 
   set_callback(:create, :before) do |doc|
     doc.total = doc.book.word_count
+    doc.book_name = doc.book.name
+    doc.book_cover = doc.book.cover
     doc.make_units
   end
 
@@ -24,7 +28,7 @@ class LearnedBook
       learned_units.build(unit_id: u.id, unit_name: u.name, total: u.word_count)
     end
   end
-  #sword@123
+
 
   set_callback(:save, :before) do |doc|
     doc.completions = 0
@@ -39,6 +43,7 @@ class LearnedBook
   end
 
   def calc
+    #sword@123
     es = error_words.map { |w| [w.unit_id, w]}.to_h
   end
 end

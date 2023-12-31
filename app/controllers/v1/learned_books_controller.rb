@@ -23,8 +23,8 @@ class V1::LearnedBooksController < ApplicationController
                                              book_id: params[:book_id],
                                              learn_type: params[:learn_type]
                                            })
-    eb_ids = @v1_learned_book.error_words.map(&:word_id)
-    @er_words = Dictionary.in(id: eb_ids).map { |w| [w.id, w] }.to_h
+    eb_ids = @v1_learned_book.error_words.map(&:dictionary_id)
+    @dictionaries = Dictionary.in(id: eb_ids).map { |w| [w.id, w] }.to_h
   end
 
   # POST /v1/learned_books
@@ -32,10 +32,6 @@ class V1::LearnedBooksController < ApplicationController
   def create
     params.permit!
     service = BookSelectionService.new(params[:student_id], params[:book_id])
-
-    p service.errors
-    p service
-    p service.valid?
 
     if service.perform
       render json: :ok, status: :created
@@ -62,13 +58,14 @@ class V1::LearnedBooksController < ApplicationController
     end
 
     v1_learned_book_params[:error_words].each do |updated_error_word|
-      error_word = @v1_learned_book.error_words.detect { |u| u.word_id.to_s == updated_error_word[:word_id].to_s && u.unit_id.to_s == updated_error_word[:unit_id].to_s }
+      error_word = @v1_learned_book.error_words.detect { |u| u.dictionary_id.to_s == updated_error_word[:dictionary_id].to_s && u.unit_id.to_s == updated_error_word[:unit_id].to_s }
       if error_word
         error_word.repeats = updated_error_word[:repeats]
         error_word.learns = updated_error_word[:learns]
         error_word.reviews = updated_error_word[:reviews]
       else
-        @v1_learned_book.error_words.build(updated_error_word.to_h)
+        p updated_error_word
+        p @v1_learned_book.error_words.build(updated_error_word.to_h)
       end
     end
 
@@ -78,30 +75,12 @@ class V1::LearnedBooksController < ApplicationController
                                                student_id: updated_learned_word[:student_id],
                                                book_id: updated_learned_word[:book_id],
                                                unit_id: updated_learned_word[:unit_id],
-                                               word_id: updated_learned_word[:word_id]
+                                               dictionary_id: updated_learned_word[:dictionary_id]
                                              })
       lw.duration += updated_learned_word[:duration]
       lw.save
     end
 
-    # params.permit!
-    # @v1_learned_book = LearnedBook.where({
-    #                                        student_id: params[:student_id],
-    #                                        book_id: params[:book_id],
-    #                                        learn_type: params[:learn_type],
-    #                                      }).first
-
-    # data = params.to_h
-    # p ewords = data[:error_words]
-    # p ews = @v1_learned_book.error_words.to_a
-    # unless ewords.blank?
-    #  ewords.each do |ew|
-    #    @v1_learned_book.error_words.build(ew.to_h) unless ews.detect { |w| w.word_id.to_s == ew['word_id'] }
-    #  end
-    # end
-    #@v1_learned_book.learned_units = params[:learned_units].map { |u| u.to_h } unless params[:learned_units].blank?
-    # eb_ids = @v1_learned_book.error_words.map(&:word_id)
-    # @er_words = Word.in(id: eb_ids).map { |w| [w.id, w] }.to_h
     p @v1_learned_book.errors
 
     if @v1_learned_book.save
@@ -140,9 +119,9 @@ class V1::LearnedBooksController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def v1_learned_book_params
-    params.fetch(:learned_book, {}).permit(:student_id, :book_id, :learn_type,
-                                           error_words: [:unit_id, :word_id, :repeats, :learns, :reviews],
-                                           learned_units: [:id, :completions, :rights, :wrongs, :last_word_index],
-                                           learned_words: [:student_id, :book_id, :unit_id, :word_id, :duration])
+    params.fetch(:learned_book, {}).permit(:id,:student_id, :book_id, :learn_type, :total, :before_learn_quiz, :after_learn_quiz,
+      error_words: [:unit_id, :dictionary_id, :repeats, :learns, :reviews],
+                                           learned_units: [:id, :unit_id, :unit_name, :completions, :rights, :wrongs, :last_word_index],
+                                           learned_words: [:student_id, :book_id, :unit_id, :dictionary_id, :duration])
   end
 end
