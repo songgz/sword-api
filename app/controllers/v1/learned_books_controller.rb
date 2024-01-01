@@ -100,13 +100,27 @@ class V1::LearnedBooksController < ApplicationController
   # DELETE /v1/learned_books/1.json
   def destroy
     params.permit!
-    @v1_learned_book.error_words.where(unit_id: params[:learned_unit_id].to_s).delete
-    learned_unit = @v1_learned_book.learned_units.detect { |u| u.id.to_s == params[:learned_unit_id].to_s }
-    learned_unit.completions = 0
-    learned_unit.rights = 0
-    learned_unit.wrongs = 0
-    learned_unit.last_word_index = 0
-    @v1_learned_book.save
+    if params[:learned_unit_id].present?
+      @v1_learned_book.error_words.where(unit_id: params[:learned_unit_id].to_s).delete
+      learned_unit = @v1_learned_book.learned_units.detect { |u| u.id.to_s == params[:learned_unit_id].to_s }
+      learned_unit.completions = 0
+      learned_unit.rights = 0
+      learned_unit.wrongs = 0
+      learned_unit.last_word_index = 0
+      @v1_learned_book.save
+    elsif params[:del] == 'record'
+      @v1_learned_book.error_words = []
+      @v1_learned_book.learned_units.each do |lu|
+        lu.completions = 0
+        lu.rights = 0
+        lu.wrongs = 0
+        lu.last_word_index = 0
+      end
+      @v1_learned_book.save
+    else
+      @v1_learned_book.destroy
+    end
+
     render json: @v1_learned_book.errors, status: :ok
   end
 
