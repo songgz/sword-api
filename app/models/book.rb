@@ -15,7 +15,7 @@ class Book
   field :kind, type: String # "GO_ABROAD",
 
 
-  has_many :units
+  has_many :units, class_name: 'Unit'
 
   validates :name, :my_id, presence: true
 

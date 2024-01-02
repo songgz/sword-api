@@ -29,6 +29,7 @@ class V1::StatisticsController < ApplicationController
                                    }
                                  }
                                ]).to_a if student_id.present?
+    p result
 
     data = {weeks: [],days: [], durations: [], words: []}
     (0..6).each do |i|
@@ -79,7 +80,7 @@ class V1::StatisticsController < ApplicationController
     (0..(end_date.day-1)).each do |i|
       data[:seq] << i
       data[:days] << start_date + i
-      d = result.detect {|r| r["seq"] == i+1}
+      d = result.detect {|r| r["seq"] == i}
       if d
         data[:durations] << (d["total_duration"]/60).floor
         data[:words] << d["total_word"]

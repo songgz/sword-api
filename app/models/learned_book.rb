@@ -24,8 +24,8 @@ class LearnedBook
   end
 
   def make_units
-    book.units.each do |u|
-      learned_units.build(unit_id: u.id, unit_name: u.name, total: u.word_count)
+    self.book.units.each do |u|
+      self.learned_units.build(unit_id: u.id, unit_name: u.name, total: u.word_count)
     end
   end
 
