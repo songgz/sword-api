@@ -35,7 +35,7 @@ class V1::StatisticsController < ApplicationController
     (0..6).each do |i|
       data[:weeks] << i
       data[:days] << start_date + i
-      d = result.detect {|r| r["week"] == i+1}
+      d = result.detect {|r| r["week"] == (i+2) % 7}
       if d
         data[:durations] << (d["total_duration"]/60).floor
         data[:words] << d["total_word"]
@@ -44,7 +44,7 @@ class V1::StatisticsController < ApplicationController
         data[:words] << 0
       end
     end
-
+    p data
     render json: {data: data}, status: :ok
   end
 
@@ -75,12 +75,13 @@ class V1::StatisticsController < ApplicationController
                                                   }
                                                 }
                                               ]).to_a if student_id.present?
+    p result
 
     data = {seq: [],days: [], durations: [], words: []}
     (0..(end_date.day-1)).each do |i|
       data[:seq] << i
       data[:days] << start_date + i
-      d = result.detect {|r| r["seq"] == i}
+      d = result.detect {|r| r["seq"] == i+1}
       if d
         data[:durations] << (d["total_duration"]/60).floor
         data[:words] << d["total_word"]
@@ -125,7 +126,7 @@ class V1::StatisticsController < ApplicationController
     data = {seq: [],days: [], durations: [], words: []}
     (0..11).each do |i|
       data[:seq] << i
-      data[:days] << start_date + i
+      data[:days] << "#{start_date.year}-#{i+1}"
       d = result.detect {|r| r["seq"] == i+1}
       if d
         data[:durations] << (d["total_duration"]/60).floor
