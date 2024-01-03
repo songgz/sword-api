@@ -21,8 +21,8 @@ class Dictionary
 
   search_in :word, :acceptation
 
-  validates_uniqueness_of :no
-  validates_uniqueness_of :my_id
+  #validates_uniqueness_of :no
+  #validates_uniqueness_of :my_id
 
 
 end
