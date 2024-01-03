@@ -3,6 +3,6 @@ class Choice
   include Mongoid::Timestamps
 
   field :title
-  belongs_to :word, optional: true
+  belongs_to :dictionary, optional: true
   embedded_in :quiz
 end

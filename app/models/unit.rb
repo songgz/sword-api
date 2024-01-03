@@ -11,10 +11,15 @@ class Unit
   field :my_id, type: Integer
   field :my_word_nos, type: Array, default: []
 
-  belongs_to :book
-  has_and_belongs_to_many :words, class_name: 'Dictionary', inverse_of: nil
+  default_scope -> { includes(words: :dictionary) }
 
-  def book_name
+  belongs_to :book
+  has_and_belongs_to_many :dictionaries, class_name: 'Dictionary',  foreign_key: :word_ids, inverse_of: nil
+  has_many :words, class_name: "Word"
+
+
+
+    def book_name
     book.name
   end
 

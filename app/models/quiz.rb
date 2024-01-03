@@ -41,16 +41,16 @@ class Quiz
   end
 
   def generate
-    words = unit.words.to_a
+    words = unit.words.map {|w| w.dictionary}
     words.sample(total).each do |word|
-      questions.build(word: word, title: word.word) do |question|
+      questions.build(dictionary: word, title: word.word) do |question|
         if self.learn_type != 'spell'
           ws = words.reject { |o| o.id == word.id}.sample(3)
           ws << word
           ws.shuffle.each do |w|
-            c = Choice.new(word: w, title: w.acceptation)
+            c = Choice.new(dictionary: w, title: w.acceptation)
             question.choices << c
-            if c.word == word
+            if c.dictionary == word
               question.right_answer = c.id
             end
           end

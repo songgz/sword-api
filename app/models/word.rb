@@ -11,4 +11,6 @@ class Word
   belongs_to :unit, optional: true
   belongs_to :dictionary, optional: true
 
+  index({ unit_id: 1 })
+
 end
