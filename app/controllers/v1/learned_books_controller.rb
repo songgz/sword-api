@@ -72,12 +72,11 @@ class V1::LearnedBooksController < ApplicationController
     v1_learned_book_params[:learned_words].each do |updated_learned_word|
       lw = LearnedWord.find_or_initialize_by({
                                                day: Date.today,
-                                               student_id: updated_learned_word[:student_id],
-                                               book_id: updated_learned_word[:book_id],
-                                               unit_id: updated_learned_word[:unit_id],
-                                               dictionary_id: updated_learned_word[:dictionary_id]
+                                               student_id: updated_learned_word[:student_id]
                                              })
-      lw.duration += updated_learned_word[:duration]
+      lw.durations += updated_learned_word[:durations]
+      lw.completions += updated_learned_word[:completions]
+      lw.reviews += updated_learned_word[:reviews]
       lw.save
     end
 
@@ -136,6 +135,6 @@ class V1::LearnedBooksController < ApplicationController
     params.fetch(:learned_book, {}).permit(:id,:student_id, :book_id, :learn_type, :total, :before_learn_quiz, :after_learn_quiz,
       error_words: [:unit_id, :dictionary_id, :repeats, :learns, :reviews],
                                            learned_units: [:id, :unit_id, :unit_name, :completions, :rights, :wrongs, :last_word_index],
-                                           learned_words: [:student_id, :book_id, :unit_id, :dictionary_id, :duration])
+                                           learned_words: [:student_id, :book_id, :completions, :reviews, :durations])
   end
 end

@@ -3,12 +3,11 @@ class LearnedWord
   include Mongoid::Timestamps
 
   field :day, type: Date
-  field :duration, type: Integer, default: 0
+  field :durations, type: Integer, default: 0
+  field :completions, type: Integer, default: 0
+  field :reviews, type: Integer, default: 0
 
   belongs_to :student, optional: true
-  belongs_to :book, optional: true
-  belongs_to :unit, optional: true
-  belongs_to :dictionary, optional: true
 
-  index({ day: 1 })
+  index({ student_id: 1, day: 1 })
 end

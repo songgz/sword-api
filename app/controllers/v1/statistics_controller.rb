@@ -15,8 +15,9 @@ class V1::StatisticsController < ApplicationController
                                  { "$group" => {
                                    "_id" => {"$dayOfWeek" => "$day"},
                                    "day" => { "$first" => "$day" },
-                                   "total_duration" => { "$sum" => "$duration" },
-                                   "total_word" => {"$sum" => 1}}
+                                   "durations" => { "$sum" => "$durations" },
+                                   "completions" => {"$sum" => "$completions"},
+                                   "reviews" => {"$sum" => "$reviews"}}
                                  },
                                  { "$sort" => { "_id" => 1 } },
                                  {
@@ -24,24 +25,27 @@ class V1::StatisticsController < ApplicationController
                                      "_id" => 0,
                                      "week" => "$_id",
                                      "day" => 1,
-                                     "total_duration" => 1,
-                                     "total_word" => 1
+                                     "durations" => 1,
+                                     "completions" => 1,
+                                     "reviews" => 1
                                    }
                                  }
                                ]).to_a if student_id.present?
     p result
 
-    data = {weeks: [],days: [], durations: [], words: []}
+    data = {weeks: [],days: [], durations: [], completions: [], reviews: []}
     (0..6).each do |i|
       data[:weeks] << i
       data[:days] << start_date + i
       d = result.detect {|r| r["week"] == (i+2) % 7}
       if d
-        data[:durations] << (d["total_duration"]/60).floor
-        data[:words] << d["total_word"]
+        data[:durations] << (d["durations"]/60).round
+        data[:completions] << d["completions"]
+        data[:reviews] << d["reviews"]
       else
         data[:durations] << 0
-        data[:words] << 0
+        data[:completions] << 0
+        data[:reviews] << 0
       end
     end
     p data
@@ -61,33 +65,36 @@ class V1::StatisticsController < ApplicationController
                                                 { "$group" => {
                                                   "_id" => {"$dayOfMonth" => "$day"},
                                                   "day" => { "$first" => "$day" },
-                                                  "total_duration" => { "$sum" => "$duration" },
-                                                  "total_word" => {"$sum" => 1}}
+                                                  "durations" => { "$sum" => "$durations" },
+                                                  "completions" => {"$sum" => "$completions"},
+                                                  "reviews" => {"$sum" => "$reviews"}}
                                                 },
-                                                { "$sort" => { "_id" => 1 } },
                                                 {
                                                   "$project" => {
                                                     "_id" => 0,
                                                     "seq" => "$_id",
                                                     "day" => 1,
-                                                    "total_duration" => 1,
-                                                    "total_word" => 1
+                                                    "durations" => 1,
+                                                    "completions" => 1,
+                                                    "reviews" => 1
                                                   }
                                                 }
                                               ]).to_a if student_id.present?
     p result
 
-    data = {seq: [],days: [], durations: [], words: []}
+    data = {seq: [],days: [], durations: [], completions: [], reviews: []}
     (0..(end_date.day-1)).each do |i|
       data[:seq] << i
       data[:days] << start_date + i
       d = result.detect {|r| r["seq"] == i+1}
       if d
-        data[:durations] << (d["total_duration"]/60).floor
-        data[:words] << d["total_word"]
+        data[:durations] << (d["durations"]/60).round
+        data[:completions] << d["completions"]
+        data[:reviews] << d["reviews"]
       else
         data[:durations] << 0
-        data[:words] << 0
+        data[:completions] << 0
+        data[:reviews] << 0
       end
     end
 
@@ -106,9 +113,10 @@ class V1::StatisticsController < ApplicationController
                                                 },
                                                 { "$group" => {
                                                   "_id" => {"$month" => "$day"},
-                                                  "first_day" => { "$first" => "$day" },
-                                                  "total_duration" => { "$sum" => "$duration" },
-                                                  "total_word" => {"$sum" => 1}}
+                                                  "day" => { "$first" => "$day" },
+                                                  "durations" => { "$sum" => "$durations" },
+                                                  "completions" => {"$sum" => "$completions"},
+                                                  "reviews" => {"$sum" => "$reviews"}}
                                                 },
                                                 { "$sort" => { "_id" => 1 } },
                                                 {
@@ -116,24 +124,27 @@ class V1::StatisticsController < ApplicationController
                                                     "_id" => 0,
                                                     "seq" => "$_id",
                                                     "day" => { "$dateToString" => { "format" => "%Y-%m", "date" => "$first_day" } },
-                                                    "total_duration" => 1,
-                                                    "total_word" => 1
+                                                    "durations" => 1,
+                                                    "completions" => 1,
+                                                    "reviews" => 1
                                                   }
                                                 }
                                               ]).to_a if student_id.present?
 
 
-    data = {seq: [],days: [], durations: [], words: []}
+    data = {seq: [],days: [], durations: [], completions: [], reviews: []}
     (0..11).each do |i|
       data[:seq] << i
       data[:days] << "#{start_date.year}-#{i+1}"
       d = result.detect {|r| r["seq"] == i+1}
       if d
-        data[:durations] << (d["total_duration"]/60).floor
-        data[:words] << d["total_word"]
+        data[:durations] << (d["durations"]/60).round
+        data[:completions] << d["completions"]
+        data[:reviews] << d["reviews"]
       else
         data[:durations] << 0
-        data[:words] << 0
+        data[:completions] << 0
+        data[:reviews] << 0
       end
     end
 
