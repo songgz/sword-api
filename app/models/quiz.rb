@@ -44,7 +44,7 @@ class Quiz
   def generate
     words = unit.words.map {|w| w.dictionary}
     words.sample(total).each do |word|
-      questions.build(dictionary: word, title: word.word) do |question|
+      questions.build(dictionary: word, title: word.word, pronunciation: word.pronunciation) do |question|
         if self.learn_type != 'spell'
           ws = words.reject { |o| o.id == word.id}.sample(3)
           ws << word
