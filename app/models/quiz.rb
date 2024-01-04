@@ -2,6 +2,7 @@ class Quiz
   include Mongoid::Document
   include Mongoid::Timestamps
   TEST_TYPES = {beforeLearn: '学前测试', afterLearn: '学后测试'}
+  LEARN_TYPES = {read: '认读', listen: '辨音', spell: '拼写'}
 
   field :title, type: String
   field :unit_name, type: String
@@ -36,7 +37,7 @@ class Quiz
     doc.unit_name = doc.unit.name
     doc.book = doc.unit.book
     doc.book_name = doc.unit.book&.name
-    doc.title = "#{doc.book_name}.#{doc.unit_name} #{Quiz::TEST_TYPES[doc.test_type.to_sym]}"
+    doc.title = "#{doc.book_name}.#{doc.unit_name} #{Quiz::LEARN_TYPES[doc.learn_type.to_sym]} #{Quiz::TEST_TYPES[doc.test_type.to_sym]}"
     doc.generate
   end
 
