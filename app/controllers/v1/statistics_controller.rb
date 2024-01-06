@@ -37,7 +37,7 @@ class V1::StatisticsController < ApplicationController
     (0..6).each do |i|
       data[:weeks] << i
       data[:days] << start_date + i
-      d = result.detect {|r| r["week"] == i+1}
+      d = result.detect {|r| r["week"] == (i+1)%7 + 1}
       if d
         data[:durations] << (d["durations"]/60).round
         data[:completions] << d["completions"]
