@@ -32,12 +32,12 @@ class V1::StatisticsController < ApplicationController
                                  }
                                ]).to_a if student_id.present?
     p result
-
+    Rails.logger.info result
     data = {weeks: [],days: [], durations: [], completions: [], reviews: []}
     (0..6).each do |i|
       data[:weeks] << i
       data[:days] << start_date + i
-      d = result.detect {|r| r["week"] == (i+2) % 7}
+      d = result.detect {|r| r["week"] == i+1}
       if d
         data[:durations] << (d["durations"]/60).round
         data[:completions] << d["completions"]
