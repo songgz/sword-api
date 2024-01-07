@@ -36,7 +36,8 @@ module SwordApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    #config.time_zone = 'Beijing'
+    config.time_zone = 'Beijing'
+    #config.i18n.default_locale = :'zh-CN'
 
     config.generators do |g|
       g.orm :mongoid
