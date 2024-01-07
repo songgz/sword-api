@@ -13,11 +13,7 @@ class V1::StatisticsController < ApplicationController
                                    "day" => {"$gte" => start_date, "$lte" => end_date }}
                                  },
                                  { "$group" => {
-                                   "_id" => {"$dayOfWeek" =>  {
-                                     "$dateFromString" => {
-                                       "dateString" => { "$dateToString": { date: "$day", timezone: "Asia/Shanghai" } }
-                                     }
-                                 }},
+                                   "_id" => {"$dayOfWeek" => "$day"},
                                    "day" => { "$first" => "$day" },
                                    "durations" => { "$sum" => "$durations" },
                                    "completions" => {"$sum" => "$completions"},
